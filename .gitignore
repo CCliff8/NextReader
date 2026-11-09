@@ -1,0 +1,23 @@
+# Dependencies and build output (rebuilt with npm install / npm run dist)
+node_modules/
+dist/
+build/icon.iconset/
+
+# macOS
+.DS_Store
+.AppleDouble
+.Spotlight-V100
+
+# Local / personal files: never commit these
+.env
+.env.*
+*.log
+npm-debug.log*
+.claude/
+CLAUDE.md
+*.local
+*.pem
+*.p12
+*.key
+.idea/
+.vscode/

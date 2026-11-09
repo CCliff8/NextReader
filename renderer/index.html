@@ -1,0 +1,75 @@
+<!doctype html>
+<html data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <title>NextReader</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="mode-read no-sidebar">
+  <header id="titlebar">
+    <div id="tabs-wrap"><div id="tabs"></div>
+      <button id="btn-newtab" class="icon-btn" title="New tab (⌘N)"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg></button></div>
+    <div id="tools">
+      <button id="btn-sidebar" class="icon-btn" title="Toggle sidebar (⌘B)">
+        <svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M6 3v10"/></svg>
+      </button>
+      <div id="seg" role="tablist">
+        <button data-mode="read" title="Read (⌘1)">Read</button>
+        <button data-mode="edit" title="Edit (⌘2)">Edit</button>
+        <button data-mode="split" title="Side by side (⌘3)">Split</button>
+      </div>
+      <div class="menu-wrap">
+        <button id="btn-theme" class="icon-btn" title="Theme">
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 2.5v11" /><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor"/></svg>
+        </button>
+        <div id="theme-menu" class="popover" hidden></div>
+      </div>
+      <button id="btn-settings" class="icon-btn" title="Settings (⌘,)">
+        <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.8v1.6M8 12.6v1.6M1.8 8h1.6M12.6 8h1.6M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M3.6 12.4l1.1-1.1M11.3 4.7l1.1-1.1"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="main">
+    <aside id="sidebar"><div id="side-head">Folder</div><div id="tree"><p class="hint">Press ⇧⌘O to open a folder</p></div></aside>
+    <section id="editor-pane"><div id="editor"></div></section>
+    <section id="preview-pane"><article id="preview" class="markdown-body"></article></section>
+  </div>
+  <footer id="status"><span id="st-file"></span><span id="st-pos"></span></footer>
+
+  <div id="settings" class="overlay" hidden>
+    <div class="sheet" role="dialog" aria-label="Settings">
+      <div class="sheet-head"><h2>Settings</h2><button id="settings-close" class="icon-btn" title="Close (Esc)">✕</button></div>
+      <div class="sheet-body">
+        <h3>Appearance</h3>
+        <div id="theme-cards" class="cards"></div>
+
+        <h3>Reading</h3>
+        <div class="row"><label>Font</label><div class="pills" data-key="readFont">
+          <button data-v="sans">Sans</button><button data-v="serif">Serif</button></div></div>
+        <div class="row"><label>Text size <output id="o-readSize"></output></label>
+          <input type="range" data-key="readSize" min="13" max="24" step="1"></div>
+        <div class="row"><label>Page width <output id="o-readWidth"></output></label>
+          <input type="range" data-key="readWidth" min="560" max="1100" step="20"></div>
+
+        <h3>Editor</h3>
+        <div class="row"><label>Text size <output id="o-editorSize"></output></label>
+          <input type="range" data-key="editorSize" min="11" max="22" step="1"></div>
+        <div class="row"><label>Wrap long lines</label><label class="switch"><input type="checkbox" data-key="wordWrap"><span></span></label></div>
+        <div class="row"><label>Line numbers</label><label class="switch"><input type="checkbox" data-key="lineNumbers"><span></span></label></div>
+
+        <h3>When opening a file</h3>
+        <div class="row"><label>Start in</label><div class="pills" data-key="defaultMode">
+          <button data-v="read">Read</button><button data-v="edit">Edit</button><button data-v="split">Split</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../node_modules/marked/lib/marked.umd.js"></script>
+  <script src="../node_modules/dompurify/dist/purify.min.js"></script>
+  <script src="../node_modules/@highlightjs/cdn-assets/highlight.min.js"></script>
+  <script src="../node_modules/monaco-editor/min/vs/loader.js"></script>
+  <script src="shortcuts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

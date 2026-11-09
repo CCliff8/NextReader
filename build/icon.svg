@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset=".55" stop-color="#e11d74"/><stop offset="1" stop-color="#ff7a1a"/></linearGradient>
+<radialGradient id="h" cx=".2" cy=".1" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<filter id="s" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#3b0a45" flood-opacity=".45"/></filter>
+</defs>
+<rect x="100" y="100" width="824" height="824" rx="190" fill="url(#g)"/>
+<rect x="100" y="100" width="824" height="824" rx="190" fill="url(#h)"/>
+<g filter="url(#s)" fill="none" stroke="#fff" stroke-width="68" stroke-linecap="round" stroke-linejoin="round">
+<polyline points="222,690 222,340 372,540 522,340 522,690"/>
+<path d="M742 340V630M668 556L742 640L816 556"/>
+</g>
+</svg>
