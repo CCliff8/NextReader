@@ -131,3 +131,9 @@ body.mode-split #preview { padding:28px 32px 80px; }
 .card:hover { border-color:var(--muted); } .card.on { border-color:var(--accent); }
 .card .sw { height:54px; border-radius:7px; margin-bottom:7px; border:1px solid rgba(128,128,128,.25); position:relative; overflow:hidden; }
 .card .sw i { position:absolute; left:8px; height:5px; border-radius:3px; }
+
+/* ---------- Drag & drop ---------- */
+#dropzone { position:fixed; inset:0; z-index:200; display:grid; place-items:center; pointer-events:none;
+  background:color-mix(in srgb, var(--bg) 70%, transparent); }
+#dropzone[hidden] { display:none; }
+#dropzone div { padding:34px 64px; border:2px dashed var(--accent); border-radius:18px; font-size:20px; font-weight:600; color:var(--accent); background:var(--bg); }

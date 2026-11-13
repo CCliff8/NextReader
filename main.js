@@ -41,6 +41,17 @@ function listDir(dir) {
     .sort((a, b) => (b.dir - a.dir) || a.name.localeCompare(b.name));
 }
 
+ipcMain.on('open-paths', (_, paths) => {
+  const files = [];
+  for (const p of paths) {
+    try {
+      if (fs.statSync(p).isDirectory()) { send('folder-opened', p); continue; }
+      const f = readFile(p);
+      if (!f.content.includes('\u0000')) files.push(f);   // skip binary files
+    } catch {}
+  }
+  if (files.length) send('files-opened', files);
+});
 ipcMain.handle('list-dir', (_, d) => listDir(d));
 ipcMain.handle('read-file', (_, p) => readFile(p));
 ipcMain.handle('write-file', (_, p, c) => { fs.writeFileSync(p, c, 'utf8'); return true; });

@@ -111,7 +111,8 @@ marked.use({ renderer: {
     const l = (lang || '').trim().split(/\s+/)[0].toLowerCase();
     const alias = { js: 'javascript', py: 'python', ts: 'typescript', sh: 'bash', yml: 'yaml', 'c++': 'cpp' }[l] || l;
     const ok = alias && hljs.getLanguage(alias);
-    const html = ok ? hljs.highlight(text, { language: alias, ignoreIllegals: true }).value : hljs.highlightAuto(text).value;
+    const html = ok ? hljs.highlight(text, { language: alias, ignoreIllegals: true }).value
+                    : text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return `<pre><code class="hljs${ok ? ' language-' + alias : ''}">${html}</code></pre>`;
   }
 } });
@@ -252,6 +253,32 @@ $('#btn-newtab').onclick = () => newTab();
 const toggleSidebar = () => document.body.classList.toggle('no-sidebar');
 $('#btn-sidebar').onclick = toggleSidebar;
 
+/* ---------- Drag & drop ---------- */
+let dragDepth = 0;
+const dropzone = $('#dropzone');
+const hasFiles = (e) => e.dataTransfer && e.dataTransfer.types.includes('Files');
+// Capture on window and stop propagation so the editor never does work for file drags.
+const onDrag = (fn) => (e) => { if (!hasFiles(e)) return; e.preventDefault(); e.stopPropagation(); fn(e); };
+window.addEventListener('dragenter', onDrag(() => { dragDepth++; dropzone.hidden = false; }), true);
+window.addEventListener('dragover', onDrag((e) => { e.dataTransfer.dropEffect = 'copy'; }), true);
+window.addEventListener('dragleave', onDrag(() => { if (--dragDepth <= 0) { dragDepth = 0; dropzone.hidden = true; } }), true);
+window.addEventListener('drop', onDrag(async (e) => {
+  dragDepth = 0; dropzone.hidden = true;
+  const dropped = [...e.dataTransfer.files];
+  const folders = [], files = [];
+  // Read in the renderer: no round trip to the main process for plain files.
+  await Promise.all(dropped.map(async (f) => {
+    const path = window.api.pathFor(f);
+    if (!path) return;
+    try {
+      const content = await f.text();
+      if (!content.includes('\u0000')) files.push({ path, name: f.name, content });
+    } catch { folders.push(path); }   // directories cannot be read as text
+  }));
+  if (files.length) openFiles(files);
+  if (folders.length) window.api.openPaths(folders);
+}), true);
+
 /* ---------- Boot ---------- */
 window.MonacoEnvironment = {
   getWorkerUrl: () => 'data:text/javascript;charset=utf-8,' + encodeURIComponent(
@@ -273,7 +300,7 @@ require(['vs/editor/editor.main'], (m) => {
   editor = monaco.editor.create($('#editor'), {
     automaticLayout: true, minimap: { enabled: false }, fontFamily: 'ui-monospace, "SF Mono", Menlo, monospace',
     scrollBeyondLastLine: false, padding: { top: 16 }, renderWhitespace: 'selection', smoothScrolling: true,
-    renderLineHighlight: 'line', lineNumbersMinChars: 3, folding: false,
+    renderLineHighlight: 'line', dropIntoEditor: { enabled: false }, lineNumbersMinChars: 3, folding: false,
   });
   editor.onDidChangeCursorPosition(e => { $('#st-pos').textContent = `Ln ${e.position.lineNumber}, Col ${e.position.column}`; });
 
